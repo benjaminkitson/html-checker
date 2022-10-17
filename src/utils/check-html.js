@@ -1,13 +1,14 @@
 export default function checkHtml(html) {
-    const validTags = ["div", "p", "h1", "h2"]
+    const validTags = ["div", "p", "h1", "h2"];
 
     const currentCharInfo = {
         isTag: false,
+        expectClosingTag: false,
         // isChild: false,
         currentTag: undefined,
         isValidTag: false,
-        errorCount: 0
-    }
+        errorCount: 0,
+    };
 
     const chars = html.split("");
 
@@ -17,36 +18,35 @@ export default function checkHtml(html) {
 
         // "<" - beginning of new tag
 
-        // ! Illegal when: tag is already open
+        // ! Illegal when: pointed at a tag
 
         // ">" - end of current tag
 
-        // ! Illegal when: tag is not already open
+        // ! Illegal when: not pointed at a tag OR pointed at a closing tag not preceded by "/"
 
         // "/" - closing tag indicator
 
-        // ! Illegal when: not found after a valid tag name OR not found after "<"
+        // ! Illegal when: at the beginning of an opening tab
 
         // "[char]" - either part of a tag, or part of the html's "child content"
 
         // ! Illegal when: after "/" in a self closing tag while open
 
-        const { isTag, isChild, currentTag, isValidTag, errorCount } = currentCharInfo;
+        const { isTag, expectClosingTag, currentTag} = currentCharInfo;
         const isTagStart = char === "<";
         const isTagEnd = char === ">";
-        const isClosingTag = isTag && char === "/";
+        const isClosing = char === "/";
 
-        if (!isTag && !isChild && !isTagStart) {
-            errorCount++
+        if (isTag && !isTagStart) {
+            currentCharInfo.errorCount++;
         }
 
-        if (isTag && !isClosingTag) {
-            currentTag += char
+        if (!isTag && isTagEnd) {
+            currentCharInfo.errorCount++;
         }
 
-        if (isTagStart) {
-            currentCharInfo.isTag = true
-            currentCharInfo.currentTag = ""
+        if (isClosing && currentTag === "") {
+            currentCharInfo.errorCount++;
         }
 
     })
