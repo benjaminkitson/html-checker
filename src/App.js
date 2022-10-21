@@ -15,7 +15,7 @@ function App() {
                     onChange={(e) => setHtml(e.target.value)}
                 />
                 <button
-                    onClick={() => checkHtml()}
+                    onClick={() => console.log(checkHtml())}
                     className="h-20 w-40 bg-blue-200"
                 >
                     CHECK HTML

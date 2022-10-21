@@ -1,5 +1,5 @@
-export default function checkHtml(html) {
-    const validTags = ["div", "p", "h1", "h2"];
+export default function checkHtml() {
+    // const validTags = ["div", "p", "h1", "h2"];
 
     const currentCharInfo = {
         isTag: false,
@@ -12,8 +12,7 @@ export default function checkHtml(html) {
 
     const chars = html.split("");
 
-    chars.forEach((char, index) => {
-
+    chars.forEach((char) => {
         // A given character in an html string can be one of the following (ignoring attributes):
 
         // "<" - beginning of new tag
@@ -32,7 +31,7 @@ export default function checkHtml(html) {
 
         // ! Illegal when: after "/" in a self closing tag while open
 
-        const { isTag, expectClosingTag, currentTag} = currentCharInfo;
+        const { isTag, currentTag } = currentCharInfo;
         const isTagStart = char === "<";
         const isTagEnd = char === ">";
         const isClosing = char === "/";
@@ -48,6 +47,7 @@ export default function checkHtml(html) {
         if (isClosing && currentTag === "") {
             currentCharInfo.errorCount++;
         }
+    });
 
-    })
+    return currentCharInfo.errorCount;
 }
